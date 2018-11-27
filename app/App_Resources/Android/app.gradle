@@ -1,0 +1,12 @@
+// Add your native dependencies here:
+
+android {
+  defaultConfig {  
+    generatedDensities = []
+    applicationId = "org.nativescript.application"
+    minSdkVersion 23
+  }
+  aaptOptions {  
+    additionalParameters "--no-version-vectors"  
+  }  
+} 

@@ -1,0 +1,8 @@
+{
+  "android": {
+    "v8Flags": "--expose_gc"
+  },
+  "main": "main",
+  "name": "cosmos-signer-nsv",
+  "version": "1.0.0"
+}
