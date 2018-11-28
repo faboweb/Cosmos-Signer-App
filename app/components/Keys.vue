@@ -20,7 +20,7 @@
     // instantiate the plugin
     let secureStorage = new SecureStorage();
     // import {getCrypto} from "irisnet-crypto"
-    import fundraiser from "cosmos-fundraiser"
+    import {generateWallet} from "./wallet.js"
   export default {
     data() {
       return {
@@ -48,8 +48,11 @@
             })
             this.keys = keys
         },
-        addKey(name, password) {
-            // let Crypto = getCrypto("iris") // only "iris" and "ethereum" work
+        async addKey(name, password) {
+            console.log(await generateWallet())
+
+
+             // let Crypto = getCrypto("iris") // only "iris" and "ethereum" work
             // const keyPair = Crypto.create()
             // this.keys.push({
             //     name,
