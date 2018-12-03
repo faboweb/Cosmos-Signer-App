@@ -1,0 +1,78 @@
+[{
+          consumer: "cosmos-signer",
+          type: "multi",
+part: 1,
+parts: 3
+          endpoint: "https://10.0.2.2:9070/tx/broadcast",
+          address:
+            "cosmos1vcurycmpx33rgd3exfskgdt9v43kydn9vcurgef4xyunqe35xqcngvesxgergvfnzdz2z6",
+          requestMetaData: {
+            sequence: "0",
+            account_number: "1",
+            chain_id: "local-testnet"
+          },
+          tx: '{
+            fee: { amount: [{ amount: "0", denom: "" }], gas: "200000" },
+            memo: "",
+            msg: [
+              {
+                type: "cosmos-sdk/Send",
+                value: {
+                  inputs: [
+                    {
+                      address:
+                        "cosmos1vcurycmpx33rgd3exfskgdt9v43kydn9vcurgef4xyun'
+        },
+
+{
+          consumer: "cosmos-signer",
+          type: "multi",
+part: 2,
+parts: 3
+          endpoint: "https://10.0.2.2:9070/tx/broadcast",
+          address:
+            "cosmos1vcurycmpx33rgd3exfskgdt9v43kydn9vcurgef4xyunqe35xqcngvesxgergvfnzdz2z6",
+          requestMetaData: {
+            sequence: "0",
+            account_number: "1",
+            chain_id: "local-testnet"
+          },
+          tx: 'qe35xqcngvesxgergvfnzdz2z6",
+                      coins: [{ amount: "10", denom: "localcoin" }]
+                    }
+                  ],
+                  outputs: [
+                    {'
+        },
+
+{
+          consumer: "cosmos-signer",
+          type: "multi",
+part: 3,
+parts: 3
+          endpoint: "https://10.0.2.2:9070/tx/broadcast",
+          address:
+            "cosmos1vcurycmpx33rgd3exfskgdt9v43kydn9vcurgef4xyunqe35xqcngvesxgergvfnzdz2z6",
+          requestMetaData: {
+            sequence: "0",
+            account_number: "1",
+            chain_id: "local-testnet"
+          },
+          tx: '                      address: "cosmos1ehev36xzn994a5kc5leak83ztz2n97n99nekug",
+                      coins: [{ amount: "10", denom: "localcoin" }]
+                    }
+                  ]
+                }
+              }
+            ],
+            signatures: null
+          }'
+        }
+
+
+
+
+
+
+                        
+    ]
