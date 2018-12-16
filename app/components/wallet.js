@@ -5,8 +5,6 @@ const secp256k1 = require("./secp256k1.min.js");
 import sha256 from "crypto-js/sha256";
 import ripemd160 from "crypto-js/ripemd160";
 import CryptoJS from "crypto-js";
-import { NSCrypto } from "nativescript-crypto";
-const crypto = new NSCrypto();
 
 const hdPathAtom = "m/44'/118'/0'/0/0"; // key controlling ATOM allocation
 const secp256k1PubkeyPrefix = "EB5AE98721";
@@ -28,8 +26,9 @@ export function generateWalletFromSeed(mnemonic) {
   }
 }
 
-export function generateWallet() {
-  const randomBytes = Buffer.from(crypto.secureRandomBytes(32), "base64");
+export function generateWallet(randomByteFunc) {
+  console.log(randomByteFunc);
+  const randomBytes = Buffer.from(randomByteFunc(32), "base64");
   console.log("randomBytes", randomBytes);
   if (randomBytes.length !== 32) throw Error("Entropy has incorrect length");
 
@@ -46,8 +45,35 @@ acc cosmos1v3z3242hq7xrms35gu722v4nt8uux8nvug5gye
 pub 855AD8681D0D86D1E91E00167939CB6694D2C422ACD208A0072939487F6999EB9D
 acc cosmos1hrtz7umxfyzun8v2xcas0v45hj2uhp6sgdpac8
 */
+
+// let address = createCosmosAddress(
+//   Buffer.from(
+//     "52FDFC072182654F163F5F0F9A621D729566C74D10037C4D7BBB0407D1E2C64981",
+//     "hex"
+//   )
+// );
+// if (address !== "cosmos1v3z3242hq7xrms35gu722v4nt8uux8nvug5gye") {
+//   throw new Error(
+//     "address generation is wrong. Expected cosmos1v3z3242hq7xrms35gu722v4nt8uux8nvug5gye, got " +
+//       address
+//   );
+// }
+// address = createCosmosAddress(
+//   Buffer.from(
+//     "855AD8681D0D86D1E91E00167939CB6694D2C422ACD208A0072939487F6999EB9D",
+//     "hex"
+//   )
+// );
+// if (address !== "cosmos1hrtz7umxfyzun8v2xcas0v45hj2uhp6sgdpac8") {
+//   throw new Error(
+//     "address generation is wrong. Expected cosmos1hrtz7umxfyzun8v2xcas0v45hj2uhp6sgdpac8, got " +
+//       address
+//   );
+// }
+
 export function createCosmosAddress(publicKey) {
-  const hash = ripemd160(sha256(publicKey.toString("hex"))).toString();
+  var message = CryptoJS.enc.Hex.parse(publicKey.toString("hex"));
+  const hash = ripemd160(sha256(message)).toString();
   const address = Buffer.from(hash, "hex");
   const cosmosAddress = bech32ify(address, `cosmos`);
 
@@ -90,17 +116,66 @@ function bech32ify(address, prefix) {
   return bech32.encode(prefix, words);
 }
 
-export function sign(
-  jsonObject,
-  wallet,
-  { sequence, account_number, chain_id }
-) {
+export function prepareSignBytes(jsonTx) {
+  if (Array.isArray(jsonTx)) {
+    return jsonTx.map(prepareSignBytes);
+  }
+
+  // string or number
+  if (typeof jsonTx !== "object") {
+    return jsonTx;
+  }
+
+  const keys = Object.keys(jsonTx);
+  if (keys.length === 2 && keys.includes("type") && keys.includes("value")) {
+    return prepareSignBytes(jsonTx.value);
+  }
+
+  let sorted = {};
+  Object.keys(jsonTx)
+    .sort()
+    .forEach(key => {
+      if (jsonTx[key] === undefined || jsonTx[key] === null) return;
+
+      sorted[key] = prepareSignBytes(jsonTx[key]);
+    });
+  return sorted;
+}
+
+export function createSignMessage(jsonTx, sequence, account_number, chain_id) {
+  return JSON.stringify(
+    prepareSignBytes({
+      fee: jsonTx.fee,
+      memo: jsonTx.memo,
+      msgs: jsonTx.msg,
+      sequence,
+      account_number,
+      chain_id
+    })
+  );
+}
+
+export function createSignature(signMessage, privateKey, publicKey) {
+  const signHash = Buffer.from(sha256(signMessage).toString(), "hex");
+
+  const { signature } = secp256k1.sign(
+    signHash,
+    Buffer.from(privateKey, "hex")
+  );
+  // test created signature
+  if (!secp256k1.verify(signHash, signature, Buffer.from(publicKey, "hex")))
+    throw Error("Created signature couldn't be verified.");
+
+  return signature.toString("base64");
+}
+
+export function sign(jsonTx, wallet, { sequence, account_number, chain_id }) {
   // remove empty values
-  Object.keys(jsonObject).forEach(key => {
-    if (jsonObject[key] === null || jsonObject[key] === undefined) {
-      delete jsonObject[key];
-    }
-  });
+  // Object.keys(jsonObject).forEach(key => {
+  //   if (jsonObject[key] === null || jsonObject[key] === undefined) {
+  //     delete jsonObject[key];
+  //   }
+  // });
 
   // create StdSignMsg
   /*
@@ -113,51 +188,40 @@ export function sign(
     Memo          string      `json:"memo"`
   }
   */
-  const stdSignMsg = Object.assign({}, jsonObject, {
+  const signMessage = createSignMessage(
+    jsonTx,
     sequence,
     account_number,
     chain_id
-  });
-
-  // order keys
-  let orderedKeys = {};
-  Object.keys(stdSignMsg)
-    .sort()
-    .forEach(function(key) {
-      orderedKeys[key] = stdSignMsg[key];
-    });
-
-  let message = JSON.stringify(orderedKeys);
-  const signBytes = Buffer.from(sha256(message).toString(), "hex");
-
-  const { signature } = secp256k1.sign(
-    signBytes,
-    Buffer.from(wallet.privateKey, "hex")
   );
-  // test created signature
-  if (
-    !secp256k1.verify(
-      signBytes,
-      signature,
-      Buffer.from(wallet.publicKey, "hex")
-    )
-  )
-    throw Error("Created signature couldn't be verified.");
+  console.log("signMessage", signMessage);
+
+  let signature = createSignature(
+    signMessage,
+    wallet.privateKey,
+    wallet.publicKey
+  );
 
   return {
     pub_key: {
       type: "tendermint/PubKeySecp256k1", // TODO allow other keytypes
-      value: toBase64(wallet.publicKey)
+      value: Buffer.from(wallet.publicKey, "hex").toString("base64")
     },
-    signature: toBase64(signature.toString("hex")),
+    signature,
     account_number: account_number,
     sequence
   };
 }
 
-function toBase64(hexString) {
-  var wordArray = CryptoJS.enc.Hex.parse(hexString);
-  var base64Msg = CryptoJS.enc.Base64.stringify(wordArray);
+export function createSignedTx(tx, signature) {
+  return Object.assign({}, tx, {
+    signatures: [signature]
+  });
+}
 
-  return base64Msg;
+export function createBroadcastBody(signedTx) {
+  return JSON.stringify({
+    tx: signedTx,
+    return: "block"
+  });
 }

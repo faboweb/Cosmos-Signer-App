@@ -1,6 +1,4 @@
 var QRCode = require("qrcode");
-var GIF = require("gif.js");
-const { loadImage } = require("canvas");
 
 const LENGTH = 300;
 function splitMessage(tx) {
@@ -80,6 +78,7 @@ function createMessages(message) {
 
 async function createQRCodes(messages) {
   messages.forEach(async (message, index) => {
+    // works also with toImageURL for the browser
     await QRCode.toFile("./qr-" + index + ".png", JSON.stringify(message), {
       type: "png"
     });

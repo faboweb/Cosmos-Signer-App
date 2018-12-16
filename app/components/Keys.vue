@@ -27,7 +27,6 @@ let secureStorage = new SecureStorage();
 let AES = require("crypto-js/aes");
 let CryptoJS = require("crypto-js");
 var dialogs = require("tns-core-modules/ui/dialogs");
-import { generateWallet } from "./wallet.js";
 import AddKey from "./AddKey";
 export default {
   data() {
@@ -49,18 +48,7 @@ export default {
       });
 
       this.keys = keys ? JSON.parse(keys) : [];
-      console.log("keys", this.keys);
-    },
-    async addKey(name, password) {
-      const { privateKey, publicKey, cosmosAddress } = await generateWallet();
-      const wallet = await generateWallet();
-
-      this.keys.push({
-        name,
-        address: wallet.address
-      });
-      this.storeKeyNames(this.keys);
-      this.storeKey(wallet, name, password);
+      console.log("keys", JSON.stringify(this.keys));
     },
     goToAddKey() {
       this.$navigateTo(AddKey);

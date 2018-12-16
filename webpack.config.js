@@ -118,7 +118,7 @@ module.exports = env => {
       fs: "empty",
       __dirname: false
     },
-    devtool: "none",
+    devtool: "source-maps",
     optimization: {
       splitChunks: {
         cacheGroups: {

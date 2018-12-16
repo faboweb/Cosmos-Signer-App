@@ -50,55 +50,54 @@ export default {
       // });
       var message;
       var parts = {};
-      await barcodescanner.scan({
-        formats: "QR_CODE",
-        orientation: "portrait",
-        // this callback will be invoked for every unique scan in realtime!
-        continuousScanCallback: function(result) {
-          console.log("result", result.text);
-          const part = JSON.parse(result.text);
-          if (message.type === "single") {
-            message = JSON.parse(part.payload);
-            barcodescanner.stop();
-          }
+      // await barcodescanner.scan({
+      //   formats: "QR_CODE",
+      //   orientation: "portrait",
+      //   // this callback will be invoked for every unique scan in realtime!
+      //   continuousScanCallback: function(result) {
+      //     console.log("result", result.text);
+      //     const part = JSON.parse(result.text);
+      //     if (message.type === "single") {
+      //       message = JSON.parse(part.payload);
+      //       barcodescanner.stop();
+      //     }
 
-          if (message.type === "multi") {
-            parts[part.part] = part.tx;
-          }
-          console.log("parts", Object.keys(parts));
-          if (Object.keys(parts).length === part.parts) {
-            console.log("parts", parts);
-            let stitchedTx = Object.keys(parts)
-              .sort()
-              .reduce((sum, cur) => {
-                return sum + parts[cur];
-              }, "");
-            console.log("stitchedTx", stitchedTx);
-            message = JSON.parse(stitchedTx);
-            console.log("tx", message.tx);
+      //     if (message.type === "multi") {
+      //       parts[part.part] = part.tx;
+      //     }
+      //     console.log("parts", Object.keys(parts));
+      //     if (Object.keys(parts).length === part.parts) {
+      //       console.log("parts", parts);
+      //       let stitchedTx = Object.keys(parts)
+      //         .sort()
+      //         .reduce((sum, cur) => {
+      //           return sum + parts[cur];
+      //         }, "");
+      //       console.log("stitchedTx", stitchedTx);
+      //       message = JSON.parse(stitchedTx);
+      //       console.log("tx", message.tx);
 
-            barcodescanner.stop();
-          }
-        },
-        closeCallback: function() {
-          console.log("Scanner closed");
-        }, // invoked when the scanner was closed
-        reportDuplicates: false // which is the default
-      });
+      //       barcodescanner.stop();
+      //     }
+      //   },
+      //   closeCallback: function() {
+      //     console.log("Scanner closed");
+      //   }, // invoked when the scanner was closed
+      //   reportDuplicates: false // which is the default
+      // });
       let result = {
         text: JSON.stringify({
           consumer: "cosmos-signer",
           type: "single",
-          endpoint: "https://10.0.2.2:9070/tx/broadcast",
-          address:
-            "cosmos1vcurycmpx33rgd3exfskgdt9v43kydn9vcurgef4xyunqe35xqcngvesxgergvfnzdz2z6",
+          endpoint: "https://localhost:9070/tx/broadcast",
+          address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47",
           requestMetaData: {
-            sequence: "0",
+            sequence: "5",
             account_number: "1",
             chain_id: "local-testnet"
           },
           tx: {
-            fee: { amount: [{ amount: "0", denom: "" }], gas: "200000" },
+            // fee: { amount: [{ amount: "0", denom: "" }], gas: "200000" },
             memo: "",
             msg: [
               {
@@ -106,15 +105,14 @@ export default {
                 value: {
                   inputs: [
                     {
-                      address:
-                        "cosmos1vcurycmpx33rgd3exfskgdt9v43kydn9vcurgef4xyunqe35xqcngvesxgergvfnzdz2z6",
-                      coins: [{ amount: "10", denom: "localcoin" }]
+                      address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47"
+                      // coins: [{ amount: "10", denom: "localcoin" }]
                     }
                   ],
                   outputs: [
                     {
-                      address: "cosmos1ehev36xzn994a5kc5leak83ztz2n97n99nekug",
-                      coins: [{ amount: "10", denom: "localcoin" }]
+                      address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47"
+                      // coins: [{ amount: "10", denom: "localcoin" }]
                     }
                   ]
                 }

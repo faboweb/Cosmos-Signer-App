@@ -10,6 +10,11 @@
 
 <script>
 import App from "./App.vue";
+import SuccessfulSent from "./SuccessfulSent.vue";
+import { createSignedTx, createBroadcastBody } from "./wallet.js";
+import * as Https from "nativescript-https";
+const httpModule = require("http");
+import * as app from "application";
 export default {
   data: () => ({
     message: "Sending message ..."
@@ -17,34 +22,52 @@ export default {
   methods: {
     async send(tx, endpoint, signature) {
       try {
-        let signedTx = Object.assign({}, tx, {
-          signatures: [signature]
-        });
-        let body = JSON.stringify({
-          tx: signedTx,
-          return: "block"
-        });
+        let url = endpoint;
+        if (TNS_ENV === "development" && app.android) {
+          url = url.replace("localhost", "10.0.2.2");
+        }
+        try {
+          let signedTx = createSignedTx(tx, signature);
+          let content = createBroadcastBody(signedTx);
 
-        console.log("body", body);
-        console.log("endpoint", endpoint);
-        await fetch(endpoint, {
-          method: "POST",
-          body
-        })
-          .then(res => {
-            if (res.ok) {
-              this.message = "Send successfull";
-              return;
-            }
-
-            this.message = "Sending failed: " + res.status;
-            console.log("res", res);
-          })
-          .catch(err => {
-            this.message = "Sending failed: " + err.message;
-          });
+          console.log("content", content);
+          console.log("endpoint", url);
+          await httpModule
+            .request({
+              url,
+              method: "POST",
+              content
+            })
+            .then(res => {
+              let content;
+              try {
+                content = res.content.toJSON();
+              } catch (err) {
+                content = res.content.toString();
+              }
+              console.log("res", res.statusCode, content);
+              if (res.statusCode === 200) {
+                this.message = "Send successfull";
+                this.$navigateTo(SuccessfulSent, {
+                  props: {
+                    response: content
+                  }
+                });
+                return;
+              }
+              this.message = "Sending failed: " + content;
+            })
+            .catch(err => {
+              console.error(err);
+              this.message = "Sending failed: " + err;
+            });
+        } catch (err) {
+          console.error(err);
+          this.message = "Sending failed: " + err.message;
+        }
       } catch (err) {
         console.error(err);
+        this.message = "Sending failed: " + err.message;
       }
     },
     goToStart() {
@@ -54,7 +77,7 @@ export default {
   props: {
     tx: Object,
     endpoint: String,
-    signature: String
+    signature: Object
   },
   mounted() {
     this.send(this.tx, this.endpoint, this.signature);

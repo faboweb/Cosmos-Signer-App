@@ -22,6 +22,7 @@ let AES = require("crypto-js/aes");
 // import {getCrypto} from "irisnet-crypto"
 import { generateWallet } from "./wallet.js";
 import DisplaySeed from "./DisplaySeed";
+import { NSCrypto } from "nativescript-crypto";
 export default {
   data() {
     return {
@@ -64,8 +65,8 @@ export default {
         return;
       }
       try {
-        const wallet = generateWallet();
-        console.log(JSON.stringify(wallet));
+        const crypto = new NSCrypto();
+        const wallet = generateWallet(crypto.secureRandomBytes);
 
         this.keys.push({
           name: this.name,

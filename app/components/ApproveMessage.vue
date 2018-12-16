@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { BarcodeScanner } from "nativescript-barcodescanner";
 let barcodescanner = new BarcodeScanner();
 // require the plugin
 import { SecureStorage } from "nativescript-secure-storage";
@@ -22,6 +21,8 @@ var dialogs = require("tns-core-modules/ui/dialogs");
 import App from "./App.vue";
 import Sending from "./Sending.vue";
 import { sign } from "./wallet.js";
+import RadDataForm from "nativescript-ui-dataform";
+
 export default {
   computed: {
     message() {

@@ -1,0 +1,8 @@
+{
+  "account_number": "3",
+  "chain_id": "1234",
+  "fee": { "amount": [{ "amount": "150", "denom": "atom" }], "gas": "50000" },
+  "memo": "memo",
+  "msgs": [["xxx"]],
+  "sequence": "6"
+}
