@@ -13,16 +13,8 @@
 </template>
 
 <script>
-// require the plugin
-import { SecureStorage } from "nativescript-secure-storage";
-// instantiate the plugin
-let secureStorage = new SecureStorage();
-let AES = require("crypto-js/aes");
-
-// import {getCrypto} from "irisnet-crypto"
-import { generateWallet } from "./wallet.js";
 import DisplaySeed from "./DisplaySeed";
-import { NSCrypto } from "nativescript-crypto";
+import { loadKeyNames, addKey } from "./keystore.js";
 export default {
   data() {
     return {
@@ -33,29 +25,11 @@ export default {
     };
   },
   methods: {
-    async storeKeyNames(keys) {
-      // async
-      let success = await secureStorage.set({
-        key: "keys",
-        value: JSON.stringify(keys)
-      });
-    },
-    async storeKey(key, name, password) {
-      // TODO encrypt
-      var ciphertext = AES.encrypt(JSON.stringify(key), password).toString();
-      let success = await secureStorage.set({
-        key: "key_" + name,
-        value: ciphertext
-      });
-    },
     async load() {
-      let keys = await secureStorage.get({
-        key: "keys"
-      });
+      let keys = await loadKeyNames();
       this.keys = keys ? JSON.parse(keys) : [];
     },
     async addKey() {
-      console.log("keys", this.keys);
       if (!this.name || !this.password) {
         this.error = "You need to specify a name and password";
         return;
@@ -65,18 +39,9 @@ export default {
         return;
       }
       try {
-        const crypto = new NSCrypto();
-        const wallet = generateWallet(crypto.secureRandomBytes);
+        const { mnemonic } = await addKey(this.name, this.password);
 
-        this.keys.push({
-          name: this.name,
-          address: wallet.cosmosAddress
-        });
-        this.storeKeyNames(this.keys);
-        console.log(this.keys);
-        this.storeKey(wallet, this.name, this.password);
-
-        this.goToSeedDisplay(wallet.mnemonic);
+        this.goToSeedDisplay(mnemonic);
       } catch (err) {
         this.error = err;
       }

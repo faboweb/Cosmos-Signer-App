@@ -10,10 +10,7 @@
 </template>
 
 <script>
-let barcodescanner = new BarcodeScanner();
-// require the plugin
 import { SecureStorage } from "nativescript-secure-storage";
-// instantiate the plugin
 let secureStorage = new SecureStorage();
 import AES from "crypto-js/aes";
 import CryptoJS from "crypto-js";

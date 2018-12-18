@@ -15,13 +15,8 @@
 </template>
 
 <script>
-// require the plugin
-import { SecureStorage } from "nativescript-secure-storage";
-// instantiate the plugin
-let secureStorage = new SecureStorage();
-// import {getCrypto} from "irisnet-crypto"
-import { generateWalletFromSeed } from "./wallet.js";
-import DisplaySeed from "./DisplaySeed";
+import { loadKeyNames, importKey } from "./keystore.js";
+import Keys from "./Keys";
 export default {
   data() {
     return {
@@ -32,24 +27,8 @@ export default {
     };
   },
   methods: {
-    async storeKeyNames(keys) {
-      // async
-      let success = await secureStorage.set({
-        key: "keys",
-        value: JSON.stringify(keys)
-      });
-    },
-    async storeKey(key, name, password) {
-      // TODO encrypt
-      let success = await secureStorage.set({
-        key: "key_" + name,
-        value: JSON.stringify(key)
-      });
-    },
     async load() {
-      let keys = await secureStorage.get({
-        key: "keys"
-      });
+      let keys = await loadKeyNames();
       this.keys = keys ? JSON.parse(keys) : [];
     },
     async addKey() {
@@ -62,21 +41,15 @@ export default {
         return;
       }
       try {
-        this.keys.push({
-          name: this.name,
-          address: wallet.cosmosAddress
-        });
-        this.storeKeyNames(this.keys);
-        console.log(this.keys);
-        this.storeKey(wallet, this.name, this.password);
+        await importKey(this.name, this.password, this.seed);
 
-        this.goToSeedDisplay(seed);
+        this.goToKeys();
       } catch (err) {
         this.error = err;
       }
     },
-    goToSeedDisplay(seed) {
-      this.$navigateTo(DisplaySeed);
+    goToKeys() {
+      this.$navigateTo(Keys);
     }
   },
   mounted() {
