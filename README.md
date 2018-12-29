@@ -29,6 +29,7 @@ tns run <platform> --bundle
 cd ..
 git clone https://github.com/cosmos/voyager.git
 cd voyager
+git checkout fabo/signer-app
 yarn
 yarn build:gaia
 yarn build:local
