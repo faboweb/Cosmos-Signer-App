@@ -10,6 +10,7 @@
 cd ..
 cd cosmos-signer-nsv
 yarn
+npm install -g nativescript
 tns run <platform> --bundle
 ```
 
