@@ -27,6 +27,7 @@
     "irisnet-crypto": "https://github.com/irisnet/irisnet-crypto",
     "jest": "^23.6.0",
     "nativescript-barcodescanner": "^2.7.9",
+    "nativescript-clipboard": "^1.1.7",
     "nativescript-crypto": "^0.9.11",
     "nativescript-https": "^1.0.1",
     "nativescript-secure-storage": "^2.3.0",

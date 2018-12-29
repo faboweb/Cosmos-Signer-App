@@ -14,7 +14,7 @@
 
 <script>
 import DisplaySeed from "./DisplaySeed";
-import { loadKeyNames, addKey } from "./keystore.js";
+import { loadKeyNames, addNewKey } from "./keystore.js";
 export default {
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
         return;
       }
       try {
-        const { mnemonic } = await addKey(this.name, this.password);
+        const { mnemonic } = await addNewKey(this.name, this.password);
 
         this.goToSeedDisplay(mnemonic);
       } catch (err) {

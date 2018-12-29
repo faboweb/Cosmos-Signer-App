@@ -28,7 +28,7 @@ async function storeKey(wallet, name, password) {
   });
 }
 export async function addKey(name, password, wallet) {
-  let keys = loadKeyNames();
+  let keys = (await loadKeyNames()) || [];
 
   keys.push({
     name,

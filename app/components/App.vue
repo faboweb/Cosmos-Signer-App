@@ -82,43 +82,43 @@ export default {
       //   }, // invoked when the scanner was closed
       //   reportDuplicates: false // which is the default
       // });
-      let result = {
-        text: JSON.stringify({
-          consumer: "cosmos-signer",
-          type: "single",
-          endpoint: "https://localhost:9070/tx/broadcast",
-          address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47",
-          requestMetaData: {
-            sequence: "5",
-            account_number: "1",
-            chain_id: "local-testnet"
-          },
-          tx: {
-            // fee: { amount: [{ amount: "0", denom: "" }], gas: "200000" },
-            memo: "",
-            msg: [
-              {
-                type: "cosmos-sdk/Send",
-                value: {
-                  inputs: [
-                    {
-                      address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47"
-                      // coins: [{ amount: "10", denom: "localcoin" }]
-                    }
-                  ],
-                  outputs: [
-                    {
-                      address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47"
-                      // coins: [{ amount: "10", denom: "localcoin" }]
-                    }
-                  ]
-                }
-              }
-            ],
-            signatures: null
-          }
-        })
-      };
+      // let result = {
+      //   text: JSON.stringify({
+      //     consumer: "cosmos-signer",
+      //     type: "single",
+      //     endpoint: "https://localhost:9070/tx/broadcast",
+      //     address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47",
+      //     requestMetaData: {
+      //       sequence: "5",
+      //       account_number: "1",
+      //       chain_id: "local-testnet"
+      //     },
+      //     tx: {
+      //       // fee: { amount: [{ amount: "0", denom: "" }], gas: "200000" },
+      //       memo: "",
+      //       msg: [
+      //         {
+      //           type: "cosmos-sdk/Send",
+      //           value: {
+      //             inputs: [
+      //               {
+      //                 address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47"
+      //                 // coins: [{ amount: "10", denom: "localcoin" }]
+      //               }
+      //             ],
+      //             outputs: [
+      //               {
+      //                 address: "cosmos1ysuve8qyugqhp86f54k03x0p300p3syw4kel47"
+      //                 // coins: [{ amount: "10", denom: "localcoin" }]
+      //               }
+      //             ]
+      //           }
+      //         }
+      //       ],
+      //       signatures: null
+      //     }
+      //   })
+      // };
       try {
         const payload = JSON.parse(result.text);
         console.log(payload);

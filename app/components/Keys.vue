@@ -9,7 +9,7 @@
                     <FlexboxLayout>
                       <StackLayout>
                         <Label :text="key.name" />  
-                        <Label :text="key.address" flexShrink="1" />  
+                        <TextView :text="key.address" editable="false" flexShrink="1" @tap="copy(key.address)" />
                       </StackLayout>
                       <Button width="20%" @tap="deleteKey(key.name)">Delete</Button>
                     </FlexboxLayout>
@@ -27,6 +27,7 @@ let secureStorage = new SecureStorage();
 let AES = require("crypto-js/aes");
 let CryptoJS = require("crypto-js");
 var dialogs = require("tns-core-modules/ui/dialogs");
+var clipboard = require("nativescript-clipboard");
 import AddKey from "./AddKey";
 export default {
   data() {
@@ -49,6 +50,10 @@ export default {
 
       this.keys = keys ? JSON.parse(keys) : [];
       console.log("keys", JSON.stringify(this.keys));
+    },
+    async copy(value) {
+      await clipboard.setText(value);
+      dialogs.alert("Copied the address to the clipboard.");
     },
     goToAddKey() {
       this.$navigateTo(AddKey);
