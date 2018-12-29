@@ -59,8 +59,8 @@ yarn start local-testnet
 
 ### Import SSL certificate in Android emulator
 
-- drag and drop `ssl/server_dev.cert` into emulator
-- google for how to import a cert in an android amulator
+- follow https://medium.com/@noumaan/ssl-app-dev-a2923d5113c6
+- use / drag and drop `ssl/server_dev.cert` into emulator
 
 ### Start Backend with HTTPS
 
