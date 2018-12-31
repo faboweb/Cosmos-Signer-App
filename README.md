@@ -29,10 +29,14 @@ tns run <platform> --bundle
 cd ..
 git clone https://github.com/cosmos/voyager.git
 cd voyager
+git checkout fabo/signer-app
 yarn
 yarn build:gaia
 yarn build:local
 ```
+
+- Wallet
+- Send
 
 ### Import key in Voyager
 
@@ -40,13 +44,7 @@ yarn build:local
 - Import account
 ...
 
-### Use Signer App branch of Voyager (HACKY)
-
-``` bash
-git checkout fabo/signer-app
-```
-
-### Start Voyager and do a transaction for your created address (i.e. send coins to yourself)
+### Start Voyager and send tokens from the imported address (i.e. to yourself)
 
 ``` bash
 yarn start local-testnet
@@ -55,6 +53,7 @@ yarn start local-testnet
 - Sign in to address created with Signer App
 - Wallet
 - Send Localcoins to yourself
+- Use `Cosmos Signer App` signing method
 
 ### Store the QR code (i.e. do a photo of the QR code)
 
@@ -72,6 +71,8 @@ yarn backend:fixed-https
 ```
 
 ### Send transaction via signer app using the QR Code
+
+(in signer app)
 
 - Sign
 - Scan QR Code
