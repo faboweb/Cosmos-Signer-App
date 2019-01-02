@@ -4,13 +4,18 @@
 
 ## POC walkthrough
 
+### Install the signer app
+
+```bash
+git clone https://github.com/faboweb/Cosmos-Signer-App.git
+cd cosmos-signer-app
+yarn
+npm install -g nativescript
+```
+
 ### Start the signer app
 
 ``` bash
-cd ..
-cd cosmos-signer-nsv
-yarn
-npm install -g nativescript
 tns run <platform> --bundle
 ```
 
