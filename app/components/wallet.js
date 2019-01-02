@@ -29,7 +29,6 @@ export function generateWalletFromSeed(mnemonic) {
 export function generateWallet(randomByteFunc) {
   console.log(randomByteFunc);
   const randomBytes = Buffer.from(randomByteFunc(32), "base64");
-  console.log("randomBytes", randomBytes);
   if (randomBytes.length !== 32) throw Error("Entropy has incorrect length");
 
   const mnemonic = bip39.entropyToMnemonic(randomBytes.toString("hex"));

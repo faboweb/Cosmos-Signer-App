@@ -6,7 +6,7 @@ let AES = require("crypto-js/aes");
 import { NSCrypto } from "nativescript-crypto";
 const crypto = new NSCrypto();
 
-import { generateWallet } from "./wallet.js";
+import { generateWallet, generateWalletFromSeed } from "./wallet.js";
 
 export async function storeKeyNames(keys) {
   // async
@@ -28,7 +28,8 @@ async function storeKey(wallet, name, password) {
   });
 }
 export async function addKey(name, password, wallet) {
-  let keys = (await loadKeyNames()) || [];
+  let keysString = (await loadKeyNames()) || "[]";
+  let keys = JSON.parse(keysString);
 
   keys.push({
     name,

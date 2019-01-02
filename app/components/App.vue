@@ -127,7 +127,7 @@ export default {
             tx: payload.tx,
             endpoint: payload.endpoint,
             address: payload.address,
-            requestMetaData: payload.requestMetaData
+            requestMetaData: payload.base_req
           }
         });
       } catch (err) {

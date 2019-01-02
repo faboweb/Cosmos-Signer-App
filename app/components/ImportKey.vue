@@ -9,7 +9,7 @@
             <Label>Seed</Label>
             <TextField v-model="seed" required />
             <Button @tap="addKey()">ADD KEY</Button>
-            <TextField v-if="error" v-model="error" disabled="disabled" />
+            <TextView v-if="error" v-model="error" editable="false" />
         </StackLayout>
     </Page>
 </template>
@@ -17,13 +17,15 @@
 <script>
 import { loadKeyNames, importKey } from "./keystore.js";
 import Keys from "./Keys";
+import { alert } from "tns-core-modules/ui/dialogs/dialogs";
 export default {
   data() {
     return {
       keys: [],
       password: null,
       name: null,
-      error: null
+      error: null,
+      seed: null
     };
   },
   methods: {
@@ -32,11 +34,12 @@ export default {
       this.keys = keys ? JSON.parse(keys) : [];
     },
     async addKey() {
+      console.log("AddKey");
       if (!this.name || !this.password || !this.seed) {
         this.error = "You need to specify a name and password and the seed";
         return;
       }
-      if (this.keys.find(key => key.name === name)) {
+      if (this.keys.find(key => key.name === this.name)) {
         this.error = "Key with that name already exists";
         return;
       }

@@ -28,6 +28,7 @@ export default {
   },
   methods: {
     async sign() {
+      await this.loadKeyNames();
       try {
         console.log(JSON.stringify(this.keys), this.address, this.tx);
         let key = this.keys.find(({ address }) => this.address === address);
@@ -86,9 +87,6 @@ export default {
     endpoint: String,
     address: String,
     requestMetaData: Object
-  },
-  mounted() {
-    this.loadKeyNames();
   }
 };
 </script>

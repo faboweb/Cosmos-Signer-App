@@ -3,7 +3,7 @@
         <ActionBar title="Keys"/>
         <StackLayout>
             <Button height="120" @tap="goToAddKey()">ADD KEY</Button>
-            <Button height="120" @tap="">IMPORT KEY</Button>
+            <Button height="120" @tap="goToImportKey()">IMPORT KEY</Button>
             <ListView for="key in keys" @itemTap="">
                 <v-template>
                     <FlexboxLayout>
@@ -29,6 +29,7 @@ let CryptoJS = require("crypto-js");
 var dialogs = require("tns-core-modules/ui/dialogs");
 var clipboard = require("nativescript-clipboard");
 import AddKey from "./AddKey";
+import ImportKey from "./ImportKey";
 export default {
   data() {
     return {
@@ -57,6 +58,9 @@ export default {
     },
     goToAddKey() {
       this.$navigateTo(AddKey);
+    },
+    goToImportKey() {
+      this.$navigateTo(ImportKey);
     },
     async deleteKey(name) {
       const { password } = await dialogs.login(

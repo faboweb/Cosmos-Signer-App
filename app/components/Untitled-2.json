@@ -1,0 +1,37 @@
+{
+  "tx": {
+    "fee": { "amount": [{ "amount": "0", "denom": "" }], "gas": "200000" },
+    "memo": "",
+    "msg": [
+      {
+        "type": "cosmos-sdk/Send",
+        "value": {
+          "inputs": [
+            {
+              "address": "cosmos1mdujs7aqdy2lxp5gjgjq9d6khn330g8a2fnj8s",
+              "coins": [{ "amount": "10", "denom": "localcoin" }]
+            }
+          ],
+          "outputs": [
+            {
+              "address": "cosmos1mdujs7aqdy2lxp5gjgjq9d6khn330g8a2fnj8s",
+              "coins": [{ "amount": "10", "denom": "localcoin" }]
+            }
+          ]
+        }
+      }
+    ],
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "A3MAgdl08eyVqXbv97Dhj01QDF1D46F0jb/4GYJtjmdE"
+        },
+        "signature": "9gh4x5meLUPyMS5yn6s26eyoj6eFabodZ7kD3F6IjGwm3C0LCE9OLt8mYYz47w4G9RnDDyirew2iBcHZt6Sn4g==",
+        "account_number": "0",
+        "sequence": "1"
+      }
+    ]
+  },
+  "return": "block"
+}
